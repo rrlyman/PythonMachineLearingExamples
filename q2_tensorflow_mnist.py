@@ -33,7 +33,8 @@ from collections import namedtuple
 import numpy as np
 import pandas as pd
 import n1_2cnv1fc as nnetwork      
-import tensorflow as tf  
+from tensorflow.compat import v1 as tf
+#import tf
 dtype = np.float32
     
 if True:

@@ -12,6 +12,7 @@ import io
 from sklearn.linear_model import LogisticRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA   
 from sklearn.metrics import accuracy_score
+from ruamel_yaml.compat import utf8
 
 inputs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklnopqrstuvwxyz'
 inputs_list = list(ord(x) for x in inputs)
@@ -70,8 +71,7 @@ def encode_and_save_file(input_base, output_base, character_size, white_space, s
     
     from bitarray import bitarray  
     a = bitarray()   
-    a.fromstring(secret_message)
-    
+    a.frombytes(secret_message.encode('utf-8') )   
     index = 0
 
     def convert_to_shear(a):

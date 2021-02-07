@@ -73,7 +73,7 @@ from sklearn.metrics import accuracy_score
 #from sklearn.model_selection
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.linear_model import LogisticRegression
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 # input_filters_dict = {'m_label': list(range(48,58))+list(range(65,91))}  
 # output_feature_list  = ['orientation_one_hot','image']   

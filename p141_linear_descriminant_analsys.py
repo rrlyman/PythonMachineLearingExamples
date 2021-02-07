@@ -61,6 +61,7 @@ import matplotlib.pyplot as plt
 from sklearn.discriminant_analysis import  LinearDiscriminantAnalysis as LDA   
 print_limit = 20
 chars_to_train = range(48,58)
+n_classes = len(chars_to_train)
 columnsXY=range(0,20)
 column_str = 'column_sum{}'.format(list(columnsXY))
 
@@ -107,7 +108,7 @@ d = mean_vecs[0].shape[0] # number of features
 S_W = np.zeros((d, d))
 for label, mv in zip(unique_labels, mean_vecs):
     class_scatter = np.zeros((d, d))
-    for row in X_train_std[[y_train == label]]:
+    for row in X_train_std[y_train == label]:
         row, mv = row.reshape(d, 1), mv.reshape(d, 1)
         class_scatter += (row-mv).dot((row-mv).T)
     S_W += class_scatter
@@ -195,7 +196,7 @@ X_train_lda = lda.fit_transform(X_train_std, y_train)
 X_test_lda =  lda.transform(X_test_std)
 
 from sklearn.linear_model import LogisticRegression
-lr = LogisticRegression()
+lr = LogisticRegression(solver='liblinear', multi_class='auto')
 lr = lr.fit(X_train_lda, y_train)
 
 title = 'Linear Descriminant Analysis Training Set'
@@ -208,13 +209,13 @@ ocr_utils.plot_decision_regions(X_test_lda, y_test, classifier=lr, labels=['LD 1
 
 ###############################################################################
 n_components = 10
-lda = LDA(n_components=n_components)
+lda = LDA(n_components=min(n_components,n_classes-1))
 X_train_lda = lda.fit_transform(X_train_std, y_train)
 X_test_lda = lda.transform(X_test_std)
 
 print ('n_components={}'.format(lda.n_components))
 
-lr = LogisticRegression()
+lr = LogisticRegression(solver='liblinear', multi_class='auto')
 logistic_fitted = lr.fit(X_train_lda, y_train)
 
 from sklearn.metrics import accuracy_score
@@ -233,13 +234,13 @@ ocr_utils.montage(X2D,title='LDA E13B Error Character,components={}'.format(n_co
 
 ###############################################################################
 n_components = 10
-lda = LDA(n_components=n_components, solver='eigen')
+lda = LDA(n_components=n_components-1, solver='eigen')
 X_train_lda = lda.fit_transform(X_train_std, y_train)
 X_test_lda = lda.transform(X_test_std)
 
 print ('n_components={}'.format(lda.n_components))
 
-lr = LogisticRegression()
+lr = LogisticRegression(solver='liblinear', multi_class='auto')
 logistic_fitted = lr.fit(X_train_lda, y_train)
 
 from sklearn.metrics import accuracy_score

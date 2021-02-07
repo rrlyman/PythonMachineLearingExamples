@@ -38,7 +38,8 @@ default_zip_file = "fonts.zip"   #small data set
 import numpy as np
 import pandas as pd
 import math
-from pandas.io.common import ZipFile
+#from pandas.io.common import ZipFile
+from zipfile import ZipFile
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import sys
@@ -1064,9 +1065,13 @@ def plot_decision_regions(X=None, y=None, classifier=None, resolution = .005, te
     plt.ylim(xx2.min()-d, xx2.max()+d)
 
     # plot class samples
+
     for idx, cl in enumerate(np.unique(y)):
-        plt.scatter(X[y == cl, 0], X[y == cl, 1],
-                    alpha=0.8, c=cmap(idx),
+        xs = X[y == cl, 0]
+        ys = X[y == cl, 1]
+        c =cmap(idx)
+        plt.scatter(xs, ys,
+                    alpha=0.8, color=c,
                     marker=markers[idx%len(markers)], label=cl) 
         
     # highlight test samples

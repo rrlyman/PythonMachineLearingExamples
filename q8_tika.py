@@ -28,6 +28,7 @@ os.putenv( 'TIKA_SERVER_ENDPOINT',' http://localhost:9998') #- set to the host (
 #os.putenv( 'TIKA_CLIENT_ONLY','True') #- if set to True, then TIKA_SERVER_JAR is ignored, and relies on the value for TIKA_SERVER_ENDPOINT and treats Tika like a REST client.
 #os.putenv( 'TIKA_TRANSLATOR','org/apache/tika/language/translate/') #- set to the fully qualified class name (defaults to Lingo24) for the Tika translator implementation.
 #os.putenv( 'TIKA_SERVER_CLASSPATH','/home/richard/.m2/repository/org/apache/tika/tika-server/1.13/tika-server-1.13.jar') #- set to a string (delimited by ':' for each additional path) to prepend to the Tika server jar path.
+#os.putenv('TESSDATA_PREFIX','/usr/share/tesseract-ocr/4.00/tessdata/')
 tika.initVM()
 from tika import parser
 parsed = parser.from_buffer("comme çi comme ça")

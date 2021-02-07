@@ -56,7 +56,7 @@ import ocr_utils
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 y, X, y_test,  X_test, labels  = ocr_utils.load_E13B(chars_to_train = (48,49,50) , columns=(9,17),nChars=500) 
 
@@ -108,7 +108,7 @@ sc = StandardScaler()
 sc.fit(X_train)
 X_train_std = sc.transform(X_train)
 X_test_std = sc.transform(X_test)
-lr = LogisticRegression(C=1000.0, random_state=0)
+lr = LogisticRegression(C=1000.0, random_state=0, solver='lbfgs',multi_class='auto')
 lr.fit(X_train_std, y_train)
 X_combined_std = np.vstack((X_train_std, X_test_std))
 y_combined = np.hstack((y_train, y_test))
@@ -123,7 +123,7 @@ ocr_utils.plot_decision_regions(
 
 weights, params = [], []
 for c in np.arange(0, 5):
-    lr = LogisticRegression(C=10**c, random_state=0)
+    lr = LogisticRegression(C=10**c, random_state=0, solver='lbfgs',multi_class='auto')
     lr.fit(X_train_std, y_train)
     weights.append(lr.coef_[0])
     params.append(10**c)
@@ -132,7 +132,7 @@ for c in np.arange(0, 5):
 title = 'regression_path'
 weights, params = [], []
 for c in np.arange(0, 5):
-    lr = LogisticRegression(C=10**c, random_state=0)
+    lr = LogisticRegression(C=10**c, random_state=0, solver='lbfgs',multi_class='auto')
     lr.fit(X_train_std, y_train)
     weights.append(lr.coef_[1])
     params.append(10**c)

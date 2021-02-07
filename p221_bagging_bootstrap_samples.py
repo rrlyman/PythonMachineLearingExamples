@@ -35,7 +35,7 @@ SOFTWARE.
 
 from sklearn.preprocessing import LabelEncoder
 import ocr_utils
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 if __name__ == '__main__':

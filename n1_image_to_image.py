@@ -1,4 +1,5 @@
-import tensorflow as tf  
+from tensorflow.compat import v1 as tf
+#import tf
 import numpy as np
 from collections import namedtuple
 import datetime
@@ -258,7 +259,7 @@ class network( b_network):
             tShape = tens.get_shape()
             nDims = len(tShape)
             for i in range(nDims):
-                sumC *= tShape[i].value
+                sumC *= tShape[i]
             print ('\t{}\t{}'.format(s,sumC),flush=True)
             return sumC
                 

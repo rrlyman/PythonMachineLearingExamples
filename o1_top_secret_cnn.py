@@ -44,6 +44,10 @@ import io
 #import n1_2cnv1fc as nnetwork     
 #import n1_residual3x4 as nnetwork 
 import n1_2cnv2fc as nnetwork     
+import skimage.transform as af  
+from bitarray import bitarray 
+
+
 input_filters_dict = {'m_label': list(range(48,58))+list(range(65,91))}  
 output_feature_list  = ['orientation_one_hot','image']   
 dtype = np.float32
@@ -70,7 +74,7 @@ skewRange = np.linspace(-0.2,0.2,2)
 
 
 # pick up the base characters from training_image_file
-# produce some skeared versions 
+# produce some sheared versions 
 # make into a training set
 # place in a ocr_utils TruthedCharacters class so we can use the
 # one hot and batch functions 
@@ -94,7 +98,7 @@ lefts=[]
 orientation=[]
 recognized_label =[]
 
-import skimage.transform as af  
+
 
 for j in range(shp[0]):
     for i,skew in enumerate(skewRange):
@@ -141,10 +145,10 @@ image_file= '15-01-01 459_Mont_Lyman'
 image_file_jpg = image_file+'.jpg'
 df,t1 = ocr_utils.file_to_df(image_file,character_size, title = 'unencrypted file',white_space=white_space)
  
-from bitarray import bitarray  
+ 
 secret_message = "top secret"
 a = bitarray()   
-a.fromstring(secret_message)
+a.frombytes(secret_message.encode('utf_8'))
 
 index = 0
 encoded_skews=[]

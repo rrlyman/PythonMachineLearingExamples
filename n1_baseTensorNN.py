@@ -1,4 +1,6 @@
-import tensorflow as tf  
+from tensorflow.compat import v1 as tf
+tf.compat.v1.disable_eager_execution()
+#import tf
 import numpy as np
 from collections import namedtuple
 import datetime

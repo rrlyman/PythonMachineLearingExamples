@@ -50,25 +50,22 @@ def do_keras(X_train,X_test, y_train_ohe, y_train,y_test):
     
     model = Sequential()
     model.add(Dense(input_dim=X_train.shape[1], 
-                    output_dim=50, 
-                    init='uniform', 
+                    units=50,  
                     activation='tanh'))
     
     model.add(Dense(input_dim=50, 
-                    output_dim=50, 
-                    init='uniform', 
+                    units=50, 
                     activation='tanh'))
     
     model.add(Dense(input_dim=50, 
-                    output_dim=y_train_ohe.shape[1], 
-                    init='uniform', 
+                    units=y_train_ohe.shape[1],  
                     activation='softmax'))
     
     sgd = SGD(lr=0.001, decay=1e-7, momentum=.9)
     model.compile(loss='categorical_crossentropy', optimizer=sgd,metrics=["accuracy"])
     
     model.fit(X_train, y_train_ohe, 
-              nb_epoch=50, 
+              epochs=50, 
               batch_size=300, 
               verbose=2, 
               validation_split=0.1

@@ -1,4 +1,6 @@
-import tensorflow as tf  
+#import tensorflow as tf  
+from tensorflow.compat import v1 as tf
+tf.compat.v1.disable_eager_execution()
 import numpy as np
 from collections import namedtuple
 import datetime
@@ -43,6 +45,7 @@ class network(b_network):
                 nm = 'x_'+nm
             if i>1:
                 extra_features_width += truthed_features.feature_width[i]
+   
             lst.append(tf.placeholder(dtype, shape=[None, truthed_features.feature_width[i]], name=nm))
             
         # ph is a named tuple with key names like 'image', 'm_label', and values that
@@ -218,7 +221,7 @@ class network(b_network):
             tShape = tens.get_shape()
             nDims = len(tShape)
             for i in range(nDims):
-                sumC *= tShape[i].value
+                sumC *= tShape[i]
             print ('\t{}\t{}'.format(s,sumC),flush=True)
             return sumC
                 

@@ -93,7 +93,7 @@ images_reshaped = np.reshape(images,(num_image, 20*20))
 # run a Logistic Regression on the raw features with 20 rows, 20 columns
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 X_train , X_test, y_train, y_test = train_test_split(images_reshaped, ys, test_size=0.3, random_state=0)
 
@@ -146,7 +146,7 @@ ocr_utils.plot_decision_regions(
 #########################################################################
 # run Linear Discriminant Analysis first then Logistic Regression
 
-from sklearn.discriminant_analysis import  LinearDiscriminantAnalysis as LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 n_components = 2
 lda = LDA(n_components=n_components)
 

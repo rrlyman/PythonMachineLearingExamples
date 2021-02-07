@@ -35,7 +35,7 @@ SOFTWARE.
 import ocr_utils
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
 
 if __name__ == '__main__':	

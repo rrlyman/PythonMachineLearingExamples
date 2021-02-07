@@ -1,4 +1,4 @@
-'''k_fold_cross_validation.py
+'''k_fold_model_selection.py
 k fold cross validation splits the training set into n parts and uses a 
 different 1/n of the test set for each iteration.  It is good for
 tuning  parameters as all samples are used, reducing the variance of the 
@@ -48,12 +48,13 @@ SOFTWARE.
 import ocr_utils
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.cross_validation import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold
 from sklearn.discriminant_analysis import  LinearDiscriminantAnalysis as LDA  
 
 if __name__ == '__main__':
     #charsToTrain=range(48,58)
     chars_to_train = range(48,58)
+    n_classes = len(chars_to_train)
     
     num_chars = 3000 #limit the number to speed up the calculation
     
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     # y_train, X_train, y_test,  X_test, labels  = ocr_utils.load_E13B(chars_to_train = charsToTrain , columns=range(0,20), nChars=1000, test_size=0.3,random_state=0)  
     
     from sklearn.linear_model import LogisticRegression
-    from sklearn.cross_validation import train_test_split
+    from sklearn.model_selection import train_test_split
     
     X_train , X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.3, random_state=0)
     
@@ -99,28 +100,24 @@ if __name__ == '__main__':
     for num_PCA in num_planes:
         print ('number of Principal Components = {}'.format(num_PCA))
         pipe_lr = Pipeline([('scl', StandardScaler()),
-                    ('pca', PCA(n_components=num_PCA)),
-                    ('clf', LogisticRegression(random_state=1))])
-        
+                    ('pca', PCA(n_components=num_PCA, svd_solver='full')),
+                    ('clf', LogisticRegression(random_state=1,multi_class='auto', solver='liblinear'))])
+
         pipe_lr.fit(X_train, y_train)
         print('Test Accuracy: %.3f' % pipe_lr.score(X_test, y_test))
         
-    
-        
-        kfold = StratifiedKFold(y=y_train, 
-                                n_folds=10,
-                                random_state=1)
+        kfold = StratifiedKFold(n_splits=10, random_state=1)
         
         scores = []
-        for k, (train, test) in enumerate(kfold):
-            pipe_lr.fit(X_train[train], y_train[train])
-            score = pipe_lr.score(X_train[test], y_train[test])
+        for train_index, test_index in kfold.split(X_train, y_train):
+            pipe_lr.fit(X_train[train_index], y_train[train_index])
+            score = pipe_lr.score(X_train[test_index], y_train[test_index])
             scores.append(score)
             #print ('train {} samples: {}'.format(len(train), train))
             #print('Fold: %s, Class dist.: %s, Acc: %.3f' % (k+1, np.bincount(y_train[train])[list(charsToTrain)], score))
             
         print('\nCV accuracy: %.3f +/- %.3f' % (np.mean(scores), np.std(scores)))
-        from sklearn.cross_validation import cross_val_score
+        from sklearn.model_selection import cross_val_score
         
         scores = cross_val_score(estimator=pipe_lr, 
                                  X=X_train, 
@@ -153,21 +150,21 @@ if __name__ == '__main__':
     for num_LDA in num_planes:
         print ('number of Principal Components = {}'.format(num_LDA))
         pipe_lr = Pipeline([('scl', StandardScaler()),
-                    ('lda', LDA(n_components=num_LDA)),
-                    ('clf', LogisticRegression(random_state=1))])
-        
+                    ('lda', LDA(n_components=min(num_LDA,n_classes-1), solver='eigen')),
+                    ('clf', LogisticRegression(random_state=1,multi_class='auto',solver='liblinear'))])
+
+        kys = pipe_lr.get_params().keys()  
+        print(kys)      
+#         pipe_lr.set_params(lda__solver='eigen',clf__solver='liblinear',clf__multi_class='auto')             
         pipe_lr.fit(X_train, y_train)
         print('Test Accuracy: %.3f' % pipe_lr.score(X_test, y_test))
-    
         
-        kfold = StratifiedKFold(y=y_train, 
-                                n_folds=10,
-                                random_state=1)
+        kfold = StratifiedKFold(n_splits=10, random_state=1)
         
         scores = []
-        for k, (train, test) in enumerate(kfold):
-            pipe_lr.fit(X_train[train], y_train[train])
-            score = pipe_lr.score(X_train[test], y_train[test])
+        for train_index, test_index in kfold.split(X_train, y_train):
+            pipe_lr.fit(X_train[train_index], y_train[train_index])
+            score = pipe_lr.score(X_train[test_index], y_train[test_index])            
             scores.append(score)
             #print ('train {} samples: {}'.format(len(train), train))
             #print('Fold: %s, Class dist.: %s, Acc: %.3f' % (k+1, np.bincount(y_train[train])[list(charsToTrain)], score))

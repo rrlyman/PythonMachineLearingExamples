@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 import n1_image_to_image as nnetwork  
 #import n1_residual3x4 as nnetwork  
-import tensorflow as tf  
+from tensorflow.compat import v1 as tf 
 dtype = np.float32
 #with tf.device('/GPU:0'):
 #with tf.device('/cpu:0'): 

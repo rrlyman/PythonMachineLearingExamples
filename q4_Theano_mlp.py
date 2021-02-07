@@ -20,6 +20,7 @@ import sys
 import time
 import numpy as np
 import theano
+# must comment out downsampling in pool.py because pip install did not include downsample
 import theano.tensor as T
 import lasagne
 import ocr_utils

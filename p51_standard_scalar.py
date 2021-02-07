@@ -38,6 +38,7 @@ import numpy as np
 import ocr_utils
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Perceptron
+from sklearn.model_selection import train_test_split
 
 
 #############################################################################
@@ -51,7 +52,7 @@ y, X, y_test,  X_test, labels  = ocr_utils.load_E13B(chars_to_train = (48,51) , 
 
 print('Class labels:', np.unique(y))
 
-from sklearn.cross_validation import train_test_split
+
 #############################################################################
 # standardize the features
 
@@ -63,7 +64,7 @@ sc.fit(X_train)
 X_train_std = sc.transform(X_train)
 X_test_std = sc.transform(X_test)
 
-ppn = Perceptron(n_iter=40, eta0=0.1, random_state=0)
+ppn = Perceptron(max_iter=40, eta0=0.1, random_state=0)
 ppn.fit(X_train_std, y_train)
 
 y_pred = ppn.predict(X_test_std)

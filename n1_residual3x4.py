@@ -7,7 +7,7 @@ funnels down to a 'key' and then goes back up to image
 
 
 '''
-import tensorflow as tf  
+from tensorflow.compat import v1 as tf
 import numpy as np
 from collections import namedtuple
 import datetime
@@ -91,7 +91,7 @@ class network(b_network):
             return tf.Variable(initial)   
                 
         def shapeOuts(n):
-            print ('n={}, hin={},w={}, b={} ,hout={}\n'.format(n, h[n]._shape, w[n]._variable._shape, b[n]._variable._shape, h[n+1]._shape))
+            print ('n={}, hin={},w={}, b={} ,hout={}\n'.format(n, h[n].shape, w[n].shape, b[n].shape, h[n+1]._shape))
              
         def section(n):
             with tf.name_scope('section_'+str(n)+'_0') as scope:     
@@ -122,7 +122,7 @@ class network(b_network):
             tShape = tens.get_shape()
             nDims = len(tShape)
             for i in range(nDims):
-                sumC *= tShape[i].value
+                sumC *= tShape[i]
             print ('\t{}\t{}'.format(s,sumC),flush=True)
             return sumC
                          

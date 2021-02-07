@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 y, X, y_test,  X_test, labels  = ocr_utils.load_E13B(chars_to_train = (48,49,50) , columns=range(0,20), nChars=1000, random_state=0) 
 
 
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(
          X, y, test_size=0.3, random_state=0)

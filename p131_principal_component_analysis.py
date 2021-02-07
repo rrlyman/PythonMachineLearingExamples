@@ -130,7 +130,7 @@ pca = PCA(n_components=2)
 X_train_pca = pca.fit_transform(X_train_image)
 X_test_pca = pca.transform(X_test_image)
 
-lr = LogisticRegression()
+lr = LogisticRegression(solver='liblinear',multi_class='auto')
 logistic_fitted =lr.fit(X_train_pca, y_train)
 
 print('\nPCA Train Accuracy: {:4.6f}, n_components={}'.format(accuracy_score(y_train, logistic_fitted.predict(X_train_pca)),pca.n_components))
@@ -149,7 +149,7 @@ pca = PCA(n_components=n_components)
 X_train_pca = pca.fit_transform(X_train_image)
 X_test_pca = pca.transform(X_test_image)
 
-lr = LogisticRegression()
+lr = LogisticRegression(solver='liblinear',multi_class='auto')
 logistic_fitted = lr.fit(X_train_pca, y_train)
 
 y_train_pred = logistic_fitted.predict(X_train_pca)
@@ -191,7 +191,7 @@ pca = KernelPCA(n_components=2,kernel=kernel, gamma=15)
 X_train_pca = pca.fit_transform(X_train_image)
 X_test_pca = pca.transform(X_test_image)
 
-lr = LogisticRegression()
+lr = LogisticRegression(solver='liblinear',multi_class='auto')
 logistic_fitted=lr.fit(X_train_pca, y_train)
 y_train_pred = logistic_fitted.predict(X_train_pca)
 y_test_pred = logistic_fitted.predict(X_test_pca)

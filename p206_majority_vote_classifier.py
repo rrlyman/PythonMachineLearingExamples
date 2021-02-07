@@ -44,13 +44,12 @@ SOFTWARE.
 from sklearn.base import BaseEstimator
 from sklearn.base import ClassifierMixin
 from sklearn.preprocessing import LabelEncoder
-from sklearn.externals import six
 from sklearn.base import clone
 from sklearn.pipeline import _name_estimators
 import numpy as np       
 import ocr_utils 
-from sklearn.cross_validation import train_test_split
-from sklearn.cross_validation import cross_val_score
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier 
@@ -59,6 +58,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 import matplotlib.pyplot as plt
+from sklearn.model_selection import GridSearchCV
 
 class MajorityVoteClassifier(BaseEstimator, 
                              ClassifierMixin):
@@ -182,8 +182,8 @@ class MajorityVoteClassifier(BaseEstimator,
             return super(MajorityVoteClassifier, self).get_params(deep=False)
         else:
             out = self.named_classifiers.copy()
-            for name, step in six.iteritems(self.named_classifiers):
-                for key, value in six.iteritems(step.get_params(deep=True)):
+            for name, step in self.named_classifiers.items():
+                for key, value in step.get_params(deep=True).items():
                     out['%s__%s' % (name, key)] = value
             return out
 
@@ -204,7 +204,7 @@ X_train, X_test, y_train, y_test =\
 
 clf1 = LogisticRegression(penalty='l2', 
                           C=0.001, 
-                          random_state=0)
+                          random_state=0, solver='lbfgs')
 
 clf2 = DecisionTreeClassifier(max_depth=1, 
                               criterion='entropy', 
@@ -216,6 +216,7 @@ clf3 = KNeighborsClassifier(n_neighbors=1,
 
 pipe1 = Pipeline([['sc', StandardScaler()],
                   ['clf', clf1]])
+kys = pipe1.get_params()
 
 pipe3 = Pipeline([['sc', StandardScaler()],
                   ['clf', clf3]])
@@ -314,7 +315,7 @@ print()
 pprint.pprint(mv_clf.get_params())
 print()
   
-from sklearn.grid_search import GridSearchCV
+
 
 params = {'decisiontreeclassifier__max_depth': [1, 2],
           'pipeline-1__clf__C': [0.001, 0.1, 100.0]}
@@ -325,9 +326,13 @@ grid = GridSearchCV(estimator=mv_clf,
                     scoring='roc_auc')
 grid.fit(X_train, y_train)
 
-for params, mean_score, scores in grid.grid_scores_:
+params=grid.cv_results_['params']
+mean_scores=grid.cv_results_['mean_test_score']
+scores =    grid.cv_results_['std_test_score']
+
+for i in range(len(params)):
     print("%0.6f+/-%0.6f %r"
-            % (mean_score, scores.std() / 2, sorted(params.items())))
+            % (mean_scores[i], scores[i] / 2, sorted(params[i].items())))
 print('\nBest parameters: %s' % sorted(grid.best_params_.items()))
 print('Best Accuracy: %.6f' % grid.best_score_)
 

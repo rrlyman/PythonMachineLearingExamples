@@ -51,6 +51,7 @@ from sklearn.svm import SVC
 svm = SVC(kernel='linear', C=1.0, random_state=0)
 svm.fit(X_train_std, y_train)
 
+
 ocr_utils.plot_decision_regions(X=X_combined_std, 
                                          y=y_combined,                       
                                          classifier=svm, 
