@@ -21,6 +21,19 @@ run_batch.sc is a bash script that runs all of the programs in the directory
 The script file will create many files in the folder, /tmp/plots.
 
 
-Python 3.4
+Python 3.8
 Anaconda3
 Linux or Windows
+cuda                               11.2.1
+h5py                               2.10.0
+Keras                              2.4.3
+Lasagne                            0.1
+matplotlib                         3.3.2
+numpy                              1.19.2
+pytesseract                        0.3.7
+sklearn                            0.0
+tensorflow                         2.4.1
+tesseract                          4.1.1
+Theano                             1.0.5
+tika                               1.24
+
